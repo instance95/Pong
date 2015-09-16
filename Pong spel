@@ -1,0 +1,121 @@
+//http://spelprogrammering.nu/koda/7207700
+<script src="http://spelprogrammering.nu/simple.js">
+
+  /* 				OBS!!
+  
+  	Förslag på uppdateringar finns längst ner som kommentar
+  
+  */
+  
+  var player1 = {x: 10, y: totalHeight/2 - 40};
+  var player2 = {x: totalWidth - 20, y: totalHeight/2 - 40};
+  
+  var player1Score = 0;
+  var player2Score = 0;
+  
+  var ball = {x: totalWidth/2 - 3, y: totalHeight/2 - 3,
+              xSpeed: 3, ySpeed: 3};
+  
+  var flipped = false;
+  
+  function update()
+  {
+	fill("black");
+    
+    //Detta är bollens "spawn" samt dess rörelse    
+    circle(ball.x, ball.y, 7, "white");
+    ball.x += ball.xSpeed;
+    ball.y += ball.ySpeed;
+    
+    //Detta skapar två rektanglar (spelare)
+    rectangle(player1.x, player1.y, 10, 80, "white");
+    rectangle(player2.x, player2.y, 10, 80, "white");
+    
+    //Följande if-satser gör att spelarna kan röra sig
+    if(keyboard.w && player1.y > 0)
+    {
+      player1.y -=5;
+    }
+    
+    if(keyboard.s && player1.y < totalHeight - 80)
+    {
+      player1.y += 5; 
+    }
+    
+      if(keyboard.up && player2.y > 0)
+    {
+      player2.y -=5;
+    }
+    
+    if(keyboard.down && player2.y < totalHeight - 80)
+    {
+      player2.y += 5; 
+    }
+    
+    //Så att bollen inte flyger åt helvete
+    if(ball.y > totalHeight - 7)
+    {
+      ball.ySpeed = -ball.ySpeed; 
+    }
+    
+    if(ball.y < 0 + 7)
+    {
+      ball.ySpeed = -ball.ySpeed; 
+    }
+    
+    //Så att bollen studsar när den träffar spelarna
+    if(ball.x > totalWidth - 27 &&
+       ball.y > player2.y && 
+       ball.y < player2.y + 80 &&
+       flipped == false)
+    {
+      ball.xSpeed = -ball.xSpeed;
+      flipped = true;
+    }
+    
+    if(ball.x < 27 &&
+       ball.y > player1.y && 
+       ball.y < player1.y + 80 &&
+      flipped == false)
+    {
+      ball.xSpeed = -ball.xSpeed;
+      flipped = true;
+    }
+    
+    //Gör så att bollen inte kan byta håll direkt efter träff
+    // 					BUG FIX #1
+    if (flipped == true && ball.x > 50)
+    {
+      flipped = false;
+    }
+    
+    //SCOREBOARD
+    
+    text(200, 200, 50, player1Score, "white");
+    text(550, 200, 50, player2Score, "white");
+    
+    //Startar om spelet och räknar score(typ)
+    if(ball.x < 0)
+    {
+      ball.x = totalWidth/2 - 3;
+      ball.y = totalHeight/2 - 3;
+      player2Score++;
+    }
+    
+    if (ball.x > totalWidth)
+    {
+      ball.x = totalWidth/2 - 3;
+      ball.y = totalHeight/2 - 3;
+      player1Score++;
+    }
+    
+  }
+  
+  /*
+  
+  	Göra så att bollen flyger "random vinkel" vid omstart.
+    Lägga ditt en start/stop knapp
+  
+  */
+
+</script>
